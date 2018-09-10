@@ -1,0 +1,39 @@
+body {
+    overflow-y: scroll;
+}
+
+.custom-container {
+    max-width: 760px;
+}
+
+.zoom-checkbox {
+    transform: scale(1.5);
+    transform-origin: right center;
+    overflow: hidden;
+}
+
+.zoom-checkbox > .custom-control-label:before,
+.zoom-checkbox > .custom-control-label:after {
+    right: 0;
+    left: auto;
+}
+
+.form-control:invalid {
+    box-shadow: none;
+    border-color: #ced4da;
+}
+
+.flag-icon {
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.8);
+}
+
+#statusbar {
+    bottom: 0;
+    left: 0;
+    right: 0;
+}
+
+#statusbar > .container {
+    background-color: rgba(0, 0, 0, 0.8);
+    height: 1.5rem;
+}
