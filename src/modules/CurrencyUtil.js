@@ -29,10 +29,8 @@ class CurrencyUtil {
 
         if (list === null) {
             list = [
-                'AUD', 'BRL', 'GBP', 'CAD', 'CLP', 'CNY', 'CZK', 'DKK', 'EUR',
-                'HKD', 'HUF', 'INR', 'IDR', 'ILS', 'JPY', 'KRW', 'MYR', 'MXN',
-                'NZD', 'NOK', 'PKR', 'PHP', 'PLN', 'RUB', 'SGD', 'ZAR', 'SEK',
-                'CHF', 'TWD', 'THB', 'TRY', 'USD',
+                'AUD', 'GBP', 'CAD', 'CNY', 'EUR', 'JPY', 'MYR', 'RUB', 'SGD',
+                'CHF', 'USD',
             ]
         }
 
@@ -47,7 +45,7 @@ class CurrencyUtil {
 
     static getIgnoredCurrencyList() {
         const list = [
-            // i referred to the link below
+            // referred to the link below
             // https://bank-info.in/list-countries-flag-currency
 
             // non-country currency
@@ -89,9 +87,13 @@ class CurrencyUtil {
                     }
                 })
 
-                const halfHour = 1000 * 60 * 30
-                lscache.set(cacheKey, data, halfHour)
-                return Promise.resolve(data)
+                const dataWithDate = {
+                    epoch: Date.now(),
+                    rates: data,
+                }
+
+                lscache.set(cacheKey, dataWithDate)
+                return Promise.resolve(dataWithDate)
             })
         }
 
@@ -106,6 +108,7 @@ class CurrencyUtil {
         })
         const githubRequest = new Request(githubUrl, {
             headers: githubHeaders,
+            cache: 'no-store',
         })
 
         return fetch(githubRequest).then((r) => {
@@ -113,7 +116,12 @@ class CurrencyUtil {
         }).then((r) => {
             const sha = r.sha.substr(0, 7)
             const jsonUrl = `https://cdn.rawgit.com/altbdoor/forex-backend/${sha}/data.json`
-            return fetch(jsonUrl)
+
+            const jsonRequest = new Request(jsonUrl, {
+                cache: 'no-store',
+            })
+
+            return fetch(jsonRequest)
         }).then((r) => {
             return r.json()
         })

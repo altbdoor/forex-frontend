@@ -26,6 +26,7 @@ class App extends Component {
             currencyLoading: true,
             currencyData: {},
             lastUpdated: null,
+            isOnline: true,
         }
 
         this.resetInnerInterval = this.resetInnerInterval.bind(this)
@@ -67,7 +68,8 @@ class App extends Component {
                     </div>
 
                     <StatusBar currencyLoading={this.state.currencyLoading}
-                        lastUpdated={this.state.lastUpdated} />
+                        lastUpdated={this.state.lastUpdated}
+                        isOnline={this.state.isOnline} />
                 </div>
             </HashRouter>
         )
@@ -75,7 +77,7 @@ class App extends Component {
 
     // =====
 
-    startInnerInterval(force=false) {
+    startInnerInterval() {
         const self = this
         const halfHour = 1000 * 60 * 30
 
@@ -84,11 +86,17 @@ class App extends Component {
                 currencyLoading: true,
             })
 
-            CurrencyUtil.getRates(force).then((r) => {
+            CurrencyUtil.getRates(true).then((d) => {
                 self.setState({
                     currencyLoading: false,
-                    currencyData: r,
-                    lastUpdated: new Date(),
+                    currencyData: d.rates,
+                    lastUpdated: new Date(d.epoch),
+                    isOnline: true,
+                })
+            }).catch(() => {
+                self.offlineIntervalHandler()
+                self.setState({
+                    isOnline: false,
                 })
             })
         })
@@ -99,8 +107,19 @@ class App extends Component {
 
     resetInnerInterval() {
         clearInterval(this.innerInterval)
-        this.startInnerInterval(true)
+        this.startInnerInterval()
     }
+
+    offlineIntervalHandler() {
+        CurrencyUtil.getRates(false).then((d) => {
+            this.setState({
+                currencyLoading: false,
+                currencyData: d.rates,
+                lastUpdated: new Date(d.epoch),
+            })
+        })
+    }
+
 }
 
 

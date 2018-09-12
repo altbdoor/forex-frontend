@@ -15,7 +15,12 @@ class StatusBar extends Component {
                 minute: 'numeric',
                 second: 'numeric',
             })
-            content = `Last updated on ${dateFormatted}`
+
+            content = `Last updated on ${dateFormatted}.`
+        }
+
+        if (!this.props.isOnline) {
+            content = `[OFFLINE] ${content}`
         }
 
         return (

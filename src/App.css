@@ -6,6 +6,10 @@ body {
     max-width: 760px;
 }
 
+.navbar {
+    background-color: rgba(0, 0, 0, 0.9);
+}
+
 .zoom-checkbox {
     transform: scale(1.5);
     transform-origin: right center;
@@ -35,5 +39,6 @@ body {
 
 #statusbar > .container {
     background-color: rgba(0, 0, 0, 0.8);
-    height: 1.5rem;
+    padding-top: 0.2rem;
+    padding-bottom: 0.2rem;
 }

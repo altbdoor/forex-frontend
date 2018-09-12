@@ -18,7 +18,7 @@ class Navbar extends Component {
 
     render() {
         return (
-            <div className="navbar fixed-top navbar-expand-md navbar-dark bg-dark">
+            <div className="navbar fixed-top navbar-expand-md navbar-dark">
                 <div className="container custom-container">
                     <Link className="navbar-brand" to="/home">
                         React Forex

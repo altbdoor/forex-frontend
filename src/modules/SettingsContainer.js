@@ -26,7 +26,7 @@ class SettingsContainer extends Component {
 
             const prepend = (
                 <div className="custom-control custom-checkbox zoom-checkbox">
-                    <input id={checkboxId} type="checkbox" className="custom-control-input"
+                    <input id={checkboxId} type="checkbox" className="custom-control-input d-none"
                         value={i} checked={checkboxChecked}
                         onChange={(e) => this.changeCheckboxShow(e)} />
 

@@ -20,47 +20,50 @@ class HomeContainer extends Component {
 
     render() {
         const currencyList = Object.keys(this.props.currencyData).sort()
+        const shownCurrencies = CurrencyUtil.getShownCurrencyList()
         let orderedCurrencyComponent = null
 
-        if (!this.props.currencyLoading) {
-            const shownCurrencies = CurrencyUtil.getShownCurrencyList()
+        orderedCurrencyComponent = currencyList.filter((i) => {
+            return (
+                i !== this.state.setCurrency &&
+                shownCurrencies.indexOf(i) !== -1
+            )
 
-            orderedCurrencyComponent = currencyList.filter((i) => {
-                return (
-                    i !== this.state.setCurrency &&
-                    shownCurrencies.indexOf(i) !== -1
-                )
+        }).map((currency) => {
+            const fromAmount = this.props.currencyData[this.state.setCurrency]
+            const toAmount = this.props.currencyData[currency]
 
-            }).map((currency) => {
-                const fromAmount = this.props.currencyData[this.state.setCurrency]
-                const toAmount = this.props.currencyData[currency]
-
-                let finalAmount = toAmount / fromAmount * this.state.setAmount
-                finalAmount = finalAmount.toLocaleString(undefined, {
-                    minimumFractionDigits: 4,
-                    maximumFractionDigits: 4,
-                })
-
-                const prepend = (
-                    <span className="text-monospace">
-                        {finalAmount}
-                    </span>
-                )
-
-                return (
-                    <CurrencyCard key={currency}
-                        currency={currency}
-                        prepend={prepend} />
-                )
+            let finalAmount = toAmount / fromAmount * this.state.setAmount
+            finalAmount = finalAmount.toLocaleString(undefined, {
+                minimumFractionDigits: 4,
+                maximumFractionDigits: 4,
             })
 
-            if (orderedCurrencyComponent.length === 0) {
-                orderedCurrencyComponent = (
-                    <div className="border-bottom py-2 text-center">
-                        Go into Settings to show currencies
-                    </div>
-                )
+            const prepend = (
+                <span className="text-monospace">
+                    {finalAmount}
+                </span>
+            )
+
+            return (
+                <CurrencyCard key={currency}
+                    currency={currency}
+                    prepend={prepend} />
+            )
+        })
+
+        if (orderedCurrencyComponent.length === 0) {
+            let text = 'Go into Settings to show currencies'
+
+            if (this.props.currencyLoading) {
+                text = 'Loading currency data...'
             }
+
+            orderedCurrencyComponent = (
+                <div className="border-bottom py-2 text-center">
+                    {text}
+                </div>
+            )
         }
 
         return (
